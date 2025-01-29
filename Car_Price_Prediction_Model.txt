@@ -1,0 +1,65 @@
+1. Importent Libraries
+In this video, we'll be using several Python libraries to build a car price prediction model. First, we import pandas for data handling, matplotlib and seaborn for visualizations, and essential scikit-learn libraries for machine learning. We use train_test_split to split the data into training and testing sets, and GridSearchCV for hyperparameter tuning. OneHotEncoder and StandardScaler are used for data preprocessing, while RandomForestRegressor is our model for prediction. For evaluating the model’s performance, we import mean_absolute_error, mean_squared_error, and r2_score. Lastly, we use joblib to save and load the trained model. With all these tools set up, we're ready to build our car price prediction model!
+
+2. Load the dataset from CSV file
+Now, let's load our dataset from a CSV file using pandas. We use the pd.read_csv() function and specify the file path where the data is stored. After loading the data, we display the first few rows using the head() method to get a quick overview of the dataset. This will allow us to check the structure and the first few entries before proceeding with any further processing.
+
+3. Dataset Overview
+Next, let's perform some exploratory data analysis. We start by using the info() method to get an overview of the dataset. This will show us important details like the number of entries, the column names, the data types, and the presence of any missing values. It's a crucial first step to understand the structure of the data and assess if any cleaning is needed before we proceed with modeling.
+
+4. Statistical Summary
+Now, let's take a look at the statistical summary of our dataset using the describe() method. This will give us key statistics like the mean, standard deviation, minimum, and maximum values for each numerical column. It's a great way to understand the distribution and spread of our data, which helps in detecting any outliers or skewed data that might affect the model's performance.
+
+5. Missing Values
+Next, we check for any missing values in the dataset using isnull().sum(). This will show the total number of missing entries in each column. Identifying and handling missing values is an important step to ensure our model works efficiently and avoids errors during training."
+
+6. Scatter plot for 'Present_Price' vs 'Selling_Price'
+Let's visualize the relationship between the car's Present Price and its Selling Price using a scatter plot. We use seaborn's scatterplot() function and differentiate fuel types with color coding by setting the hue to 'Fuel_Type'. This helps us observe any trends or patterns between the current price of a car and its resale price while identifying how fuel type impacts this relationship. The plot provides valuable insights for understanding the data before building our model.
+
+7. Data Cleaning
+Now, we move on to data cleaning. First, we check if there are any missing values in the dataset. If found, we use dropna() to remove rows with missing values. Then, we eliminate duplicate entries using drop_duplicates() to ensure that our dataset is clean and free of redundant or incomplete records. Clean data is essential for building an accurate and reliable prediction model.
+
+8. Outlier detection and removal
+Next, we address outliers in the dataset, focusing on the Present_Price and Driven_kms columns. For each column, we calculate the Interquartile Range (IQR) and use it to determine the lower and upper bounds. Any data points outside these bounds are considered outliers and are removed. This step ensures that extreme values don't skew our model and lead to unreliable predictions.
+
+9. Feature engineering
+Now, let's perform feature engineering to enhance our dataset. We create a new feature called Car_Age by subtracting the car's manufacturing year from the current year, 2025. This feature helps us capture the car's age, which can significantly impact its resale value. Additionally, we drop the Car_Name and Year columns as they are no longer needed for modeling. Feature engineering like this helps make our data more meaningful for predictions.
+
+10. One-hot encoding
+Next, we perform one-hot encoding to handle categorical variables in our dataset. Using pd.get_dummies(), we convert these categorical features into numerical format. By setting drop_first=True, we avoid the dummy variable trap by dropping one of the categories from each encoded column. This step ensures the data is in the proper format for machine learning algorithms.
+
+11. Features and target variable
+Now, we separate the dataset into features and the target variable. The feature set, X, includes all columns except Selling_Price, which is our target variable. The target variable, y, contains the car's selling price that we aim to predict. This separation prepares the data for model training.
+
+12. Train-test split
+Here, we split our dataset into training and testing sets using train_test_split(). We allocate 80% of the data to training (X_train, y_train) and 20% to testing (X_test, y_test) to evaluate the model's performance. The random_state parameter ensures reproducibility, so the split remains consistent each time we run the code.
+
+13. Scaling
+Next, we scale the feature data using StandardScaler to standardize the values. This ensures all features have a mean of 0 and a standard deviation of 1, which improves the performance of many machine learning algorithms. We fit the scaler on the training data using fit_transform() and then apply the same transformation to the test data using transform().
+
+14. Fit the GridSearchCV
+Here, we set up a GridSearchCV to perform hyperparameter tuning on a RandomForestRegressor. We define a parameter grid, including options for the number of estimators, maximum tree depth, minimum samples required to split, and minimum samples required per leaf. The grid search uses 3-fold cross-validation (cv=3) to evaluate combinations of parameters, optimizing for neg_mean_absolute_error. This process helps us find the best hyperparameters for the model. The n_jobs=-1 allows the computation to use all available CPU cores for efficiency.
+
+15. Fit the model
+Now, we fit the GridSearchCV model on the training data using the fit() method. This process trains the model while trying all possible combinations of the hyperparameters defined in the parameter grid. It then selects the combination that minimizes the mean absolute error, helping us achieve the best performance from our RandomForestRegressor.
+
+16. Access the best model
+Once the grid search is complete, we can access the best model using grid_search.best_estimator_. This retrieves the RandomForestRegressor model with the optimal hyperparameters, which will now be ready for making predictions and further evaluation.
+
+17. Predictions
+Now that we have the best model, we use it to make predictions on the test data. The predict() method generates the predicted selling prices for the test set, which we can then compare to the actual values to evaluate the model's performance.
+
+18. Evaluation metrics
+Finally, we evaluate the model's performance using several metrics. We calculate the Mean Absolute Error (MAE), Mean Squared Error (MSE), and the R^2 Score to measure prediction accuracy. The MAE gives us the average magnitude of errors, the MSE penalizes larger errors more heavily, and the R^2 score indicates how well the model explains the variance in the data. We also print the best hyperparameters found during the grid search, so we can see the optimal settings for our model.
+
+19. Visualization: Predicted vs Actual
+To visualize the model's performance, we create a scatter plot comparing the Actual Selling Price vs. the Predicted Selling Price. The points are plotted in blue, with a red dashed line representing a perfect prediction (where the predicted values equal the actual values). This visualization helps us assess how well the model is predicting the prices. If the points closely align with the red line, it indicates good model accuracy.
+
+20.Residual Plot
+Next, we create a residual plot to analyze the differences between the actual and predicted values. The residuals are calculated by subtracting the predicted values from the actual values. We then plot the distribution of these residuals using a histogram with a kernel density estimate (KDE). This helps us understand if the errors are randomly distributed or if there's any pattern that could indicate potential issues with the model.
+
+21.Save the model to a file
+Finally, we save the trained model to a file using joblib.dump(). This allows us to easily load and reuse the model later without retraining it. The model is saved as car_price_prediction_model.pkl in the specified file path. This is an important step for deploying the model in production or sharing it with others.
+
+22. Load the model and make a prediction
+In this final step, we load the saved model using joblib.load(), allowing us to reuse it for new predictions. We create a dictionary with new_data that includes values for the car's Present Price, Driven Kms, and other relevant features, which are formatted to match the feature set used during training. We convert this dictionary into a pandas DataFrame and scale the data using StandardScaler, just as we did with the training data. Finally, we use the loaded model to predict the Selling Price for the new car and print the predicted price.
